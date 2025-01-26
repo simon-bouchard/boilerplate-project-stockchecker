@@ -3,7 +3,8 @@ require('dotenv').config();
 const express     = require('express');
 const bodyParser  = require('body-parser');
 const cors        = require('cors');
-const mongoose = require('mongoose');
+const mongoose	  = require('mongoose');
+const helmet      = require('helmet');
 
 const apiRoutes         = require('./routes/api.js');
 const fccTestingRoutes  = require('./routes/fcctesting.js');
@@ -22,6 +23,17 @@ mongoose.connect(process.env.MONGO_URI, {
 	useNewUrlParser: true,
 	useUnifiedTopology: true,
 })
+
+app.use(helmet.contentSecurityPolicy({
+	directives: {
+		defaultSrc: ["'self'"],
+		scriptSrc: ["'self'"],
+		styleSrc: ["'self'"],
+		imgSrc: ["'self'"]
+	}
+}));
+
+
 
 //Index page (static HTML)
 app.route('/')
